@@ -26,7 +26,7 @@ const SubjectForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm<SubjectSchema>({
-    resolver: zodResolver(subjectSchema),
+    resolver: zodResolver(subjectSchema) as any,
   });
 
   // AFTER REACT 19 IT'LL BE USEACTIONSTATE

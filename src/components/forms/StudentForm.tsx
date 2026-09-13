@@ -38,7 +38,7 @@ const StudentForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm<StudentSchema>({
-    resolver: zodResolver(studentSchema),
+    resolver: zodResolver(studentSchema) as any,
   });
 
   const [img, setImg] = useState<any>();
@@ -54,7 +54,7 @@ const StudentForm = ({
   const onSubmit = handleSubmit((data) => {
     console.log("hello");
     console.log(data);
-    formAction({ ...data, img: img?.secure_url });
+    formAction({ ...data, img: img?.secure_url } as StudentSchema);
   });
 
   const router = useRouter();

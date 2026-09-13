@@ -36,7 +36,7 @@ const ExamForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm<ExamSchema>({
-    resolver: zodResolver(examSchema),
+    resolver: zodResolver(examSchema) as any,
   });
 
   // AFTER REACT 19 IT'LL BE USEACTIONSTATE

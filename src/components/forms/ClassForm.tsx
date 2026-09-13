@@ -36,7 +36,7 @@ const ClassForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm<ClassSchema>({
-    resolver: zodResolver(classSchema),
+    resolver: zodResolver(classSchema) as any,
   });
 
   // AFTER REACT 19 IT'LL BE USEACTIONSTATE

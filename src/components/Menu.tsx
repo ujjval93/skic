@@ -1,6 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
+import LogoutButton from "./LogoutButton";
 
 const menuItems = [
   {
@@ -129,6 +130,15 @@ const Menu = async () => {
           </span>
           {i.items.map((item) => {
             if (item.visible.includes(role)) {
+              if (item.label === "Logout") {
+                return (
+                  <LogoutButton
+                    key={item.label}
+                    icon={item.icon}
+                    label={item.label}
+                  />
+                );
+              }
               return (
                 <Link
                   href={item.href}
