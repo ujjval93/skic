@@ -104,3 +104,19 @@
   color: gray !important;
   margin-bottom: 5px;
 }
+
+
+
+@keyframes marquee {
+  from {
+    transform: translateX(20%);
+  }
+
+  to {
+    transform: translateX(-25%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
