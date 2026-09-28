@@ -153,8 +153,8 @@ model Attendance {
 
   studentId String
   student   Student @relation(fields: [studentId], references: [id])
-  lessonId  Int
-  lesson    Lesson  @relation(fields: [lessonId], references: [id])
+  lessonId  Int?
+  lesson    Lesson?  @relation(fields: [lessonId], references: [id])
 }
 
 model Event {
@@ -176,6 +176,12 @@ model Announcement {
 
   classId Int?
   class   Class? @relation(fields: [classId], references: [id])
+}
+
+
+model AnnouncementSeen {
+  userId     String @id
+  lastSeenId Int    @default(0)
 }
 
 enum UserSex {

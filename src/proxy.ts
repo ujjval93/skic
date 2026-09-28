@@ -14,25 +14,19 @@ export default clerkMiddleware(async (auth, req) => {
 
   for (const { matcher, allowedRoles } of matchers) {
     if (matcher(req)) {
-      // User is not logged in
-      if (!userId) {
-        return NextResponse.redirect(
-          new URL("/sign-in", req.url)
-        );
+      // Admin routes use the admin login, everything else uses normal sign-in
+      const loginPath = req.nextUrl.pathname.startsWith("/admin")
+        ? "/admin-login"
+        : "/sign-in";
+
+      // User is not logged in, or has no role
+      if (!userId || !role) {
+        return NextResponse.redirect(new URL(loginPath, req.url));
       }
 
-      // User is logged in but has no role
-      if (!role) {
-        return NextResponse.redirect(
-          new URL("/sign-in", req.url)
-        );
-      }
-
-      // User doesn't have permission
+      // User doesn't have permission: send them to their own dashboard
       if (!allowedRoles.includes(role)) {
-        return NextResponse.redirect(
-          new URL(`/${role}`, req.url)
-        );
+        return NextResponse.redirect(new URL(`/${role}`, req.url));
       }
     }
   }

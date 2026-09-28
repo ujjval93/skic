@@ -7,19 +7,19 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Announcement, Class, Prisma } from "@prisma/client";
 import Image from "next/image";
 import { auth } from "@clerk/nextjs/server";
+import AnnouncementRow from "@/components/AnnouncementRow";
+import MarkAnnouncementsSeen from "@/components/MarkAnnouncementsSeen";
 
-
-type AnnouncementList = Announcement & { class: Class };
+type AnnouncementList = Announcement & { class: Class | null };
 const AnnouncementListPage = async ({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
-  
   const { userId, sessionClaims } = await auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;
   const currentUserId = userId;
-  
+
   const columns = [
     {
       header: "Title",
@@ -43,28 +43,20 @@ const AnnouncementListPage = async ({
         ]
       : []),
   ];
-  
+
   const renderRow = (item: AnnouncementList) => (
-    <tr
+    <AnnouncementRow
       key={item.id}
-      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
-    >
-      <td className="flex items-center gap-4 p-4">{item.title}</td>
-      <td>{item.class?.name || "-"}</td>
-      <td className="hidden md:table-cell">
-        {new Intl.DateTimeFormat("en-US").format(item.date)}
-      </td>
-      <td>
-        <div className="flex items-center gap-2">
-          {role === "admin" && (
-            <>
-              <FormContainer table="announcement" type="update" data={item} />
-              <FormContainer table="announcement" type="delete" id={item.id} />
-            </>
-          )}
-        </div>
-      </td>
-    </tr>
+      item={item}
+      actions={
+        role === "admin" ? (
+          <>
+            <FormContainer table="announcement" type="update" data={item} />
+            <FormContainer table="announcement" type="delete" id={item.id} />
+          </>
+        ) : undefined
+      }
+    />
   );
   const { page, ...queryParams } = await searchParams;
 
@@ -96,12 +88,14 @@ const AnnouncementListPage = async ({
     parent: { students: { some: { parentId: currentUserId! } } },
   };
 
-  query.OR = [
-    { classId: null },
-    {
-      class: roleConditions[role as keyof typeof roleConditions] || {},
-    },
-  ];
+  if (role !== "admin") {
+    query.OR = [
+      { classId: null },
+      {
+        class: roleConditions[role as keyof typeof roleConditions] || {},
+      },
+    ];
+  }
 
   const [data, count] = await prisma.$transaction([
     prisma.announcement.findMany({
@@ -116,7 +110,11 @@ const AnnouncementListPage = async ({
   ]);
 
   return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="m-3 mt-0 flex-1 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:m-4 sm:mt-0">
+      
+      <MarkAnnouncementsSeen />
+
+      
       {/* TOP */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">
@@ -125,10 +123,10 @@ const AnnouncementListPage = async ({
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+            <button aria-label="Filter announcements" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white transition-colors duration-200 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200">
               <Image src="/filter.png" alt="" width={14} height={14} />
             </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+            <button aria-label="Sort announcements" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white transition-colors duration-200 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
             {role === "admin" && (

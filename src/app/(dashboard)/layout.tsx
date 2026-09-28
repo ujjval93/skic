@@ -9,22 +9,30 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-screen flex">
-      {/* LEFT */}
-      <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4">
-        <Link
-          href="/"
-          className="flex items-center justify-center lg:justify-start gap-2"
-        >
-          <Image src="/logo.png" alt="logo" width={32} height={32} className="w-6 h-auto"/>
-          <span className="hidden lg:block font-bold">Shri Krishna Inter College</span>
+    <div className="flex h-screen w-full overflow-hidden bg-slate-50">
+      <aside className="hidden h-screen w-64 shrink-0 overflow-y-auto border-r border-slate-200 bg-white p-4 lg:block xl:w-72">
+        <Link href="/" className="flex items-center gap-2 px-2">
+          <Image
+            src="/logo.png"
+            alt="Shri Krishna Inter College"
+            width={32}
+            height={32}
+            className="h-8 w-8 object-contain"
+          />
+          <span className="text-sm font-semibold text-slate-900">
+            Shri Krishna Inter College
+          </span>
         </Link>
+
         <Menu />
-      </div>
-      {/* RIGHT */}
-      <div className="w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] bg-[#F7F8FA] overflow-scroll flex flex-col">
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <Navbar />
-        {children}
+
+        <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+          {children}
+        </main>
       </div>
     </div>
   );

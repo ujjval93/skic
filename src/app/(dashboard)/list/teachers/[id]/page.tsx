@@ -47,7 +47,7 @@ const SingleTeacherPage = async ({
         {/* TOP */}
         <div className="flex flex-col lg:flex-row gap-4">
           {/* USER INFO CARD */}
-          <div className="bg-lamaSky py-6 px-4 rounded-md flex-1 flex gap-4">
+          <div className="flex flex-1 gap-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-6 shadow-sm">
             <div className="w-1/3">
               <Image
                 src={teacher.img || "/noAvatar.png"}
@@ -59,14 +59,14 @@ const SingleTeacherPage = async ({
             </div>
             <div className="w-2/3 flex flex-col justify-between gap-4">
               <div className="flex items-center gap-4">
-                <h1 className="text-xl font-semibold">
+                <h1 className="text-xl font-semibold text-slate-900">
                   {teacher.name + " " + teacher.surname}
                 </h1>
                 {role === "admin" && (
                   <FormContainer table="teacher" type="update" data={teacher} />
                 )}
               </div>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-slate-600">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit.
               </p>
               <div className="flex items-center justify-between gap-2 flex-wrap text-xs font-medium">
@@ -94,7 +94,7 @@ const SingleTeacherPage = async ({
           {/* SMALL CARDS */}
           <div className="flex-1 flex gap-4 justify-between flex-wrap">
             {/* CARD */}
-            <div className="bg-white p-4 rounded-md flex gap-4 w-full md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
+            <div className="flex w-full gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
               <Image
                 src="/singleAttendance.png"
                 alt=""
@@ -104,11 +104,11 @@ const SingleTeacherPage = async ({
               />
               <div className="">
                 <h1 className="text-xl font-semibold">90%</h1>
-                <span className="text-sm text-gray-400">Attendance</span>
+                <span className="text-sm text-slate-500">Attendance</span>
               </div>
             </div>
             {/* CARD */}
-            <div className="bg-white p-4 rounded-md flex gap-4 w-full md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
+            <div className="flex w-full gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
               <Image
                 src="/singleBranch.png"
                 alt=""
@@ -120,11 +120,11 @@ const SingleTeacherPage = async ({
                 <h1 className="text-xl font-semibold">
                   {teacher._count.subjects}
                 </h1>
-                <span className="text-sm text-gray-400">Branches</span>
+                <span className="text-sm text-slate-500">Branches</span>
               </div>
             </div>
             {/* CARD */}
-            <div className="bg-white p-4 rounded-md flex gap-4 w-full md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
+            <div className="flex w-full gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
               <Image
                 src="/singleLesson.png"
                 alt=""
@@ -136,11 +136,11 @@ const SingleTeacherPage = async ({
                 <h1 className="text-xl font-semibold">
                   {teacher._count.lessons}
                 </h1>
-                <span className="text-sm text-gray-400">Lessons</span>
+                <span className="text-sm text-slate-500">Lessons</span>
               </div>
             </div>
             {/* CARD */}
-            <div className="bg-white p-4 rounded-md flex gap-4 w-full md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
+            <div className="flex w-full gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
               <Image
                 src="/singleClass.png"
                 alt=""
@@ -152,48 +152,48 @@ const SingleTeacherPage = async ({
                 <h1 className="text-xl font-semibold">
                   {teacher._count.classes}
                 </h1>
-                <span className="text-sm text-gray-400">Classes</span>
+                <span className="text-sm text-slate-500">Classes</span>
               </div>
             </div>
           </div>
         </div>
         {/* BOTTOM */}
-        <div className="mt-4 bg-white rounded-md p-4 h-200">
-          <h1>Teacher&apos;s Schedule</h1>
+        <div className="mt-4 h-200 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <h1 className="text-lg font-semibold text-slate-900">Teacher&apos;s Schedule</h1>
           <BigCalendarContainer type="teacherId" id={teacher.id} />
         </div>
       </div>
       {/* RIGHT */}
       <div className="w-full xl:w-1/3 flex flex-col gap-4">
-        <div className="bg-white p-4 rounded-md">
-          <h1 className="text-xl font-semibold">Shortcuts</h1>
-          <div className="mt-4 flex gap-4 flex-wrap text-xs text-gray-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <h1 className="text-lg font-semibold text-slate-900">Shortcuts</h1>
+          <div className="mt-4 flex flex-wrap gap-3 text-sm text-slate-600">
            <Link
-              className="p-3 rounded-md bg-lamaSkyLight"
+              className="rounded-lg border border-slate-200 bg-slate-50 p-3 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
               href={`/list/classes?supervisorId=${teacher.id}`}
             >
               Teacher&apos;s Classes
             </Link>
             <Link
-              className="p-3 rounded-md bg-lamaPurpleLight"
+              className="rounded-lg border border-slate-200 bg-slate-50 p-3 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
               href={`/list/students?teacherId=${teacher.id}`}
             >
               Teacher&apos;s Students
             </Link>
             <Link
-              className="p-3 rounded-md bg-lamaYellowLight"
+              className="rounded-lg border border-slate-200 bg-slate-50 p-3 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
               href={`/list/lessons?teacherId=${teacher.id}`}
             >
               Teacher&apos;s Lessons
             </Link>
             <Link
-              className="p-3 rounded-md bg-pink-50"
+              className="rounded-lg border border-slate-200 bg-slate-50 p-3 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
               href={`/list/exams?teacherId=${teacher.id}`}
             >
               Teacher&apos;s Exams
             </Link>
             <Link
-              className="p-3 rounded-md bg-lamaSkyLight"
+              className="rounded-lg border border-slate-200 bg-slate-50 p-3 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
               href={`/list/assignments?teacherId=${teacher.id}`}
             >
               Teacher&apos;s Assignments

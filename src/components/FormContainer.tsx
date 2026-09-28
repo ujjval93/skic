@@ -30,13 +30,15 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
 
   if (type !== "delete") {
     switch (table) {
-      case "subject":
+      case "subject": {
         const subjectTeachers = await prisma.teacher.findMany({
           select: { id: true, name: true, surname: true },
         });
         relatedData = { teachers: subjectTeachers };
         break;
-      case "class":
+      }
+
+      case "class": {
         const classGrades = await prisma.grade.findMany({
           select: { id: true, level: true },
         });
@@ -45,13 +47,17 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
         });
         relatedData = { teachers: classTeachers, grades: classGrades };
         break;
-      case "teacher":
+      }
+
+      case "teacher": {
         const teacherSubjects = await prisma.subject.findMany({
           select: { id: true, name: true },
         });
         relatedData = { subjects: teacherSubjects };
         break;
-      case "student":
+      }
+
+      case "student": {
         const studentGrades = await prisma.grade.findMany({
           select: { id: true, level: true },
         });
@@ -60,7 +66,9 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
         });
         relatedData = { classes: studentClasses, grades: studentGrades };
         break;
-      case "exam":
+      }
+
+      case "exam": {
         const examLessons = await prisma.lesson.findMany({
           where: {
             ...(role === "teacher" ? { teacherId: currentUserId! } : {}),
@@ -69,6 +77,15 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
         });
         relatedData = { lessons: examLessons };
         break;
+      }
+
+      case "announcement": {
+        const announcementClasses = await prisma.class.findMany({
+          select: { id: true, name: true },
+        });
+        relatedData = { classes: announcementClasses };
+        break;
+      }
 
       default:
         break;

@@ -77,9 +77,9 @@ const data = [
 
 const FinanceChart = () => {
   return (
-    <div className="bg-white rounded-xl w-full h-full p-4">
+    <div className="h-full w-full rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex justify-between items-center">
-        <h1 className="text-lg font-semibold">Finance</h1>
+        <h1 className="text-lg font-semibold text-slate-900">Finance</h1>
         <Image src="/moreDark.png" alt="" width={20} height={20} />
       </div>
       <ResponsiveContainer width="100%" height="90%">
@@ -98,11 +98,11 @@ const FinanceChart = () => {
           <XAxis
             dataKey="name"
             axisLine={false}
-            tick={{ fill: "#d1d5db" }}
+            tick={{ fill: "#64748b" }}
             tickLine={false}
             tickMargin={10}
           />
-          <YAxis axisLine={false} tick={{ fill: "#d1d5db" }} tickLine={false}  tickMargin={20}/>
+          <YAxis axisLine={false} tick={{ fill: "#64748b" }} tickLine={false}  tickMargin={20}/>
           <Tooltip />
           <Legend
             align="center"
@@ -112,10 +112,10 @@ const FinanceChart = () => {
           <Line
             type="monotone"
             dataKey="income"
-            stroke="#C3EBFA"
+            stroke="#2563EB"
             strokeWidth={5}
           />
-          <Line type="monotone" dataKey="expense" stroke="#CFCEFF" strokeWidth={5}/>
+          <Line type="monotone" dataKey="expense" stroke="#16A34A" strokeWidth={5}/>
         </LineChart>
       </ResponsiveContainer>
     </div>

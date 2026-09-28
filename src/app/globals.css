@@ -3,6 +3,7 @@
 .react-calendar {
   width: 100% !important;
   border: none !important;
+  color: #0f172a !important;
   font-family: "Inter", sans-serif !important;
 }
 
@@ -11,8 +12,14 @@
 }
 
 .react-calendar__tile--active {
-  background-color: #c3ebfa !important;
-  color: black !important;
+  background-color: #2563eb !important;
+  color: white !important;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: #eff6ff !important;
+  color: #1d4ed8 !important;
 }
 
 .rbc-btn-group:first-child {
@@ -29,18 +36,21 @@
 }
 
 .rbc-btn-group:last-child button {
-  border: none !important;
-  background-color: #f1f0ff !important;
+  border: 1px solid #e2e8f0 !important;
+  background-color: white !important;
+  color: #475569 !important;
   margin-left: 2px !important;
 }
 
 .rbc-toolbar button.rbc-active {
-  background-color: #dbdafe !important;
+  background-color: #eff6ff !important;
+  border-color: #bfdbfe !important;
+  color: #1d4ed8 !important;
   box-shadow: none !important;
 }
 
 .rbc-time-view {
-  border-color: #eee !important;
+  border-color: #e2e8f0 !important;
 }
 
 .rbc-time-header {
@@ -60,7 +70,7 @@
 }
 
 .rbc-timeslot-group {
-  background-color: #f7fdff !important;
+  background-color: #f8fafc !important;
 }
 
 .rbc-day-slot {
@@ -68,40 +78,17 @@
 }
 
 .rbc-event {
-  border: none !important;
-  color: black !important;
-  padding: 10px !important;
-  margin: 10px !important;
-  width: 99% !important;
-}
-
-.rbc-event:nth-child(1) {
-  background-color: #e2f8ff !important;
-}
-.rbc-event:nth-child(2) {
-  background-color: #fefce8 !important;
-}
-.rbc-event:nth-child(3) {
-  background-color: #f2f1ff !important;
-}
-.rbc-event:nth-child(4) {
-  background-color: #fdf2fb !important;
-}
-.rbc-event:nth-child(5) {
-  background-color: #e2f8ff !important;
-}
-.rbc-event:nth-child(6) {
-  background-color: #fefce8 !important;
-}
-.rbc-event:nth-child(7) {
-  background-color: #f2f1ff !important;
-}
-.rbc-event:nth-child(8) {
-  background-color: #fdf2fb !important;
+  border: 1px solid #bfdbfe !important;
+  border-radius: 6px !important;
+  background-color: #eff6ff !important;
+  color: #1e40af !important;
+  padding: 6px 8px !important;
+  margin: 4px !important;
+  width: calc(100% - 8px) !important;
 }
 
 .rbc-event-label{
-  color: gray !important;
+  color: #64748b !important;
   margin-bottom: 5px;
 }
 

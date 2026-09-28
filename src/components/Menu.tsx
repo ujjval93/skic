@@ -108,49 +108,78 @@ const menuItems = [
         href: "/settings",
         visible: ["admin", "teacher", "student", "parent"],
       },
-      {
-        icon: "/logout.png",
-        label: "Logout",
-        href: "/logout",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
     ],
   },
 ];
 
-const Menu = async () => {
+const homeRoutes: Record<string, string> = {
+  admin: "/admin",
+  teacher: "/teacher",
+  student: "/student",
+  parent: "/parent",
+};
+
+const Menu = async ({ mobile = false }: { mobile?: boolean }) => {
   const user = await currentUser();
-  const role = user?.publicMetadata.role as string;
+  const role = user?.publicMetadata?.role as string;
+
   return (
-    <div className="mt-4 text-sm">
-      {menuItems.map((i) => (
-        <div className="flex flex-col gap-2" key={i.title}>
-          <span className="hidden lg:block text-gray-400 font-light my-4">
-            {i.title}
+    <div className="mt-6 flex flex-col gap-6 text-sm">
+      {menuItems.map((section) => (
+        <div key={section.title}>
+          <span
+            className={
+              mobile
+                ? "mb-3 block px-2 text-xs font-semibold uppercase tracking-wider text-slate-400"
+                : "mb-3 hidden px-2 text-xs font-semibold uppercase tracking-wider text-slate-400 lg:block"
+            }
+          >
+            {section.title}
           </span>
-          {i.items.map((item) => {
-            if (item.visible.includes(role)) {
-              if (item.label === "Logout") {
-                return (
-                  <LogoutButton
-                    key={item.label}
-                    icon={item.icon}
-                    label={item.label}
-                  />
-                );
+
+          <div className="flex flex-col gap-1">
+            {section.items.map((item) => {
+              if (!item.visible.includes(role)) {
+                return null;
               }
+
+              const href =
+                item.label === "Home"
+                  ? homeRoutes[role] || "/"
+                  : item.href;
+
               return (
                 <Link
-                  href={item.href}
+                  href={href}
                   key={item.label}
-                  className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
+                  className={
+                    mobile
+                      ? "flex w-full items-center gap-3 rounded-lg px-3 py-3 text-slate-600 transition-colors duration-200 hover:bg-slate-50 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200"
+                      : "flex items-center justify-center gap-3 rounded-lg px-2 py-2.5 text-slate-600 transition-colors duration-200 hover:bg-slate-50 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 lg:justify-start"
+                  }
                 >
-                  <Image src={item.icon} alt="" width={20} height={20} />
-                  <span className="hidden lg:block">{item.label}</span>
+                  <Image
+                    src={item.icon}
+                    alt={item.label}
+                    width={20}
+                    height={20}
+                    className="shrink-0"
+                  />
+
+                  <span className={mobile ? "block" : "hidden lg:block"}>
+                    {item.label}
+                  </span>
                 </Link>
               );
-            }
-          })}
+            })}
+
+            {section.title === "OTHER" && (
+              <LogoutButton
+                icon="/logout.png"
+                label="Logout"
+              />
+            )}
+          </div>
         </div>
       ))}
     </div>

@@ -3,24 +3,28 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
+
 import {
-  examSchema,
-  ExamSchema,
-  subjectSchema,
-  SubjectSchema,
+  announcementSchema,
+  AnnouncementSchema,
 } from "@/lib/formValidationSchemas";
+
 import {
-  createExam,
-  createSubject,
-  updateExam,
-  updateSubject,
+  createAnnouncement,
+  updateAnnouncement,
 } from "@/lib/actions";
+
 import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+} from "react";
+
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-const ExamForm = ({
+const AnnouncementForm = ({
   type,
   data,
   setOpen,
@@ -35,14 +39,15 @@ const ExamForm = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ExamSchema>({
-    resolver: zodResolver(examSchema) as any,
+  } = useForm<AnnouncementSchema>({
+    resolver: zodResolver(announcementSchema) as any,
   });
 
   // AFTER REACT 19 IT'LL BE USEACTIONSTATE
-
   const [state, formAction] = useFormState(
-    type === "create" ? createExam : updateExam,
+    type === "create"
+      ? createAnnouncement
+      : updateAnnouncement,
     {
       success: false,
       error: false,
@@ -51,51 +56,154 @@ const ExamForm = ({
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
-    formAction(data);
+
+    formAction({
+      ...data,
+      classId: data.classId
+        ? Number(data.classId)
+        : null,
+    });
   });
 
   const router = useRouter();
 
   useEffect(() => {
     if (state.success) {
-      toast(`Exam has been ${type === "create" ? "created" : "updated"}!`);
+      toast(
+        `Announcement has been ${
+          type === "create" ? "created" : "updated"
+        }!`
+      );
+
       setOpen(false);
       router.refresh();
     }
   }, [state, router, type, setOpen]);
 
-  const { lessons } = relatedData;
+  const { classes } = relatedData;
 
   return (
-    <form className="flex flex-col gap-8" onSubmit={onSubmit}>
+    <form
+      className="flex flex-col gap-8"
+      onSubmit={onSubmit}
+    >
       <h1 className="text-xl font-semibold">
-        {type === "create" ? "Create a new exam" : "Update the exam"}
+        {type === "create"
+          ? "Create a new announcement"
+          : "Update the announcement"}
       </h1>
 
-      <div className="flex justify-between flex-wrap gap-4">
+      {/* Form Fields */}
+      <div className="flex flex-wrap justify-between gap-4">
+
+        {/* Title */}
         <InputField
-          label="Exam title"
+          label="Announcement title"
           name="title"
           defaultValue={data?.title}
           register={register}
           error={errors?.title}
         />
+
+        {/* Date */}
         <InputField
-          label="Start Date"
-          name="startTime"
-          defaultValue={data?.startTime}
+          label="Announcement date"
+          name="date"
+          defaultValue={data?.date}
           register={register}
-          error={errors?.startTime}
+          error={errors?.date}
           type="datetime-local"
         />
-        <InputField
-          label="End Date"
-          name="endTime"
-          defaultValue={data?.endTime}
-          register={register}
-          error={errors?.endTime}
-          type="datetime-local"
-        />
+
+        {/* Description */}
+        <div className="flex w-full flex-col gap-2">
+          <label className="text-sm font-medium text-slate-600">
+            Description
+          </label>
+
+          <textarea
+            {...register("description")}
+            defaultValue={data?.description}
+            rows={5}
+            placeholder="Write announcement details..."
+            className="
+              w-full
+              rounded-lg
+              border
+              border-slate-300
+              bg-white
+              px-3
+              py-2.5
+              text-sm
+              text-slate-700
+              outline-none
+              transition-colors
+              focus:border-blue-500
+              focus:ring-2
+              focus:ring-blue-100
+            "
+          />
+
+          {errors.description?.message && (
+            <p className="text-sm text-red-600">
+              {errors.description.message.toString()}
+            </p>
+          )}
+        </div>
+
+        {/* Target Class */}
+        <div className="flex w-full flex-col gap-2 md:w-[48%]">
+          <label className="text-sm font-medium text-slate-600">
+            Target Class
+          </label>
+
+          <select
+            {...register("classId")}
+            defaultValue={data?.classId ?? ""}
+            className="
+              w-full
+              rounded-lg
+              border
+              border-slate-300
+              bg-white
+              px-3
+              py-2.5
+              text-sm
+              text-slate-700
+              outline-none
+              transition-colors
+              focus:border-blue-500
+              focus:ring-2
+              focus:ring-blue-100
+            "
+          >
+            <option value="">
+              All Classes / School-wide
+            </option>
+
+            {classes?.map(
+              (item: {
+                id: number;
+                name: string;
+              }) => (
+                <option
+                  value={item.id}
+                  key={item.id}
+                >
+                  {item.name}
+                </option>
+              )
+            )}
+          </select>
+
+          {errors.classId?.message && (
+            <p className="text-sm text-red-600">
+              {errors.classId.message.toString()}
+            </p>
+          )}
+        </div>
+
+        {/* Hidden ID for update */}
         {data && (
           <InputField
             label="Id"
@@ -106,34 +214,24 @@ const ExamForm = ({
             hidden
           />
         )}
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Lesson</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("lessonId")}
-            defaultValue={data?.teachers}
-          >
-            {lessons.map((lesson: { id: number; name: string }) => (
-              <option value={lesson.id} key={lesson.id}>
-                {lesson.name}
-              </option>
-            ))}
-          </select>
-          {errors.lessonId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.lessonId.message.toString()}
-            </p>
-          )}
-        </div>
       </div>
+
+      {/* Server Error */}
       {state.error && (
-        <span className="text-red-500">Something went wrong!</span>
+        <span className="text-sm text-red-600">
+          Something went wrong!
+        </span>
       )}
-      <button className="bg-blue-400 text-white p-2 rounded-md">
+
+      {/* Submit */}
+      <button
+        type="submit"
+        className="rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200"
+      >
         {type === "create" ? "Create" : "Update"}
       </button>
     </form>
   );
 };
 
-export default ExamForm;
+export default AnnouncementForm;

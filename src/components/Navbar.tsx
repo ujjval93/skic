@@ -1,41 +1,83 @@
 import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
+import Link from "next/link";
+import Menu from "./Menu";
+import MobileSidebar from "./MobileSidebar";
+import AnnouncementBell from "./AnnouncementBell";
 
 const Navbar = async () => {
   const user = await currentUser();
+  const role = user?.publicMetadata?.role as string;
+
   return (
-    <div className="flex items-center justify-between p-4">
-      {/* SEARCH BAR */}
-      <div className="hidden md:flex items-center gap-2 text-xs rounded-full ring-[1.5px] ring-gray-300 px-2">
-        <Image src="/search.png" alt="" width={14} height={14} />
-        <input
-          type="text"
-          placeholder="Search..."
-          className="w-50 p-2 bg-transparent outline-none"
-        />
+    <header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-4 shadow-sm sm:px-6">
+      <div className="flex items-center gap-3">
+        <MobileSidebar>
+          <Menu mobile/>
+        </MobileSidebar>
+
+        <Link
+          href="/"
+          className="flex items-center gap-2 lg:hidden"
+        >
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={28}
+            height={28}
+          />
+
+          <span className="hidden text-sm font-semibold text-slate-900 sm:block">
+            Shri Krishna Inter College
+          </span>
+        </Link>
+
+        <div className="hidden items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 transition-colors focus-within:border-blue-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 md:flex">
+          <Image
+            src="/search.png"
+            alt="Search"
+            width={15}
+            height={15}
+          />
+
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-40 bg-transparent p-2 text-sm text-slate-700 outline-none placeholder:text-slate-400 sm:w-52"
+          />
+        </div>
       </div>
-      {/* ICONS AND USER */}
-      <div className="flex items-center gap-6 justify-end w-full">
-        <div className="bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer">
-          <Image src="/message.png" alt="" width={20} height={20} />
-        </div>
-        <div className="bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer relative">
-          <Image src="/announcement.png" alt="" width={20} height={20} />
-          <div className="absolute -top-3 -right-3 w-5 h-5 flex items-center justify-center bg-purple-500 text-white rounded-full text-xs">
-            1
-          </div>
-        </div>
-        <div className="flex flex-col">
-          <span className="text-xs leading-3 font-medium">Admin1</span>
-          <span className="text-[10px] text-gray-500 text-right">
-            {user?.publicMetadata?.role as string}
+
+      <div className="flex items-center gap-3 sm:gap-5">
+        <Link
+          href="/list/messages"
+          className="relative flex h-9 w-9 items-center justify-center rounded-lg transition-colors duration-200 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200"
+          aria-label="Messages"
+        >
+          <Image
+            src="/message.png"
+            alt="Messages"
+            width={20}
+            height={20}
+          />
+        </Link>
+
+        <AnnouncementBell />
+
+        <div className="hidden flex-col sm:flex">
+          <span className="text-xs font-medium leading-4 text-slate-800">
+            {user?.firstName || user?.username || "Admin"}
+          </span>
+
+          <span className="text-right text-[10px] capitalize text-slate-500">
+            {role}
           </span>
         </div>
-        {/* <Image src="/avatar.png" alt="" width={36} height={36} className="rounded-full"/> */}
+
         <UserButton />
       </div>
-    </div>
+    </header>
   );
 };
 

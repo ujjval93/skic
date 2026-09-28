@@ -58,7 +58,7 @@ const SubjectForm = ({
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
-      <h1 className="text-xl font-semibold">
+      <h1 className="text-xl font-semibold text-slate-900">
         {type === "create" ? "Create a new subject" : "Update the subject"}
       </h1>
 
@@ -81,10 +81,10 @@ const SubjectForm = ({
           />
         )}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Teachers</label>
+          <label className="text-sm font-medium text-slate-600">Teachers</label>
           <select
             multiple
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             {...register("teachers")}
             defaultValue={data?.teachers}
           >
@@ -97,16 +97,16 @@ const SubjectForm = ({
             )}
           </select>
           {errors.teachers?.message && (
-            <p className="text-xs text-red-400">
+            <p className="text-sm text-red-600">
               {errors.teachers.message.toString()}
             </p>
           )}
         </div>
       </div>
       {state.error && (
-        <span className="text-red-500">Something went wrong!</span>
+        <span className="text-sm text-red-600">Something went wrong!</span>
       )}
-      <button className="bg-blue-400 text-white p-2 rounded-md">
+      <button className="rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200">
         {type === "create" ? "Create" : "Update"}
       </button>
     </form>
